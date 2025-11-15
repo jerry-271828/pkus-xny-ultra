@@ -98,13 +98,11 @@
 
     /**
 
-     * Fixes image overlay issues - adds close functionality
+     * Fixes image overlay issues - prevents blocking bottom buttons
 
      */
 
     function fixImageOverlay() {
-
-        // Find image overlays and add click-to-close
 
         const observer = new MutationObserver(function(mutations) {
 
@@ -114,15 +112,17 @@
 
                     if (node.nodeType === 1) {
 
-                        // Look for image containers that might overlay content
-
                         const imgContainers = node.querySelectorAll('img[src*="stem"], .stem-image, [class*="image"]');
 
                         imgContainers.forEach(function(img) {
 
                             const parent = img.closest('div[style*="position"]');
 
-                            if (parent && !parent.hasAttribute('data-close-fixed')) {
+                            if (parent && !parent.hasAttribute('data-overlay-fixed')) {
+
+                                parent.style.maxHeight = 'calc(100vh - 120px)';
+
+                                parent.style.overflow = 'auto';
 
                                 parent.style.cursor = 'pointer';
 
@@ -136,7 +136,7 @@
 
                                 });
 
-                                parent.setAttribute('data-close-fixed', 'true');
+                                parent.setAttribute('data-overlay-fixed', 'true');
 
                             }
 
